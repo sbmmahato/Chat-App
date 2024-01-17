@@ -15,13 +15,10 @@ const io = require('socket.io')(http, {
     }
 });
 
-// io.on('connection', (socket) => {
-//     console.log(`User connected: ${socket.id} `);
-//     socket.on('message', (value) => {
-//       console.log('message: '+value);
-//         io.emit('message',value);
-//     });
-// });
+io.on('connection', (socket) => {
+    console.log(`User connected: ${socket.id} `);
+    socket.emit('message',`welcome ${socket.id}`);
+});
 
 app.get('/api', (req, res) => {
   res.json({
@@ -29,13 +26,12 @@ app.get('/api', (req, res) => {
   });
 });
 
-app.post('/roomID', (req,res)=>{
-    io.on('connection', (socket)=>{
-        console.log("yoo");
-        socket.join(req.headers.room).emit('xyz',(value)=>{console.log('joined'+value)});
-    })
-    res.send(req.headers.room);
-})
+// app.post('/roomID', (req,res)=>{
+//   // io.sockets.emit('joinedd')
+//   socket.join(req.headers.room);
+//   io.to(req.headers.room).emit('working',"its working");
+//     res.send(req.headers.room);
+// })
 
 http.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
