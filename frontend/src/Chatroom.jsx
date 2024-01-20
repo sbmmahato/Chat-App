@@ -22,7 +22,7 @@ function Chatroom() {
     <input onChange={(e)=>{
         setChat(e.target.value);
     }}></input>
-    <button onClick={()=>{
+    {/* <button onClick={()=>{
         fetch('http://localhost:4000/roomID',{
             method:"POST",
             headers:{
@@ -30,6 +30,10 @@ function Chatroom() {
                 "room":roomID
             }
         }).then((data)=>{return data.json()}).then((value)=>{console.log(value)});
+    }}>SEND</button> */}
+
+    <button onClick={()=>{
+        // socket.emit('join-room',)
     }}>SEND</button>
     </div>
 }

@@ -9,9 +9,14 @@ function Home(){
             setRoom(e.target.value);
         }}></input><br/><br/>
         <button onClick={()=>{
-            window.location="/chatroom/"+room;
+            socket.emit('join-room',room)
+            
+            socket.on('message',()=>{
+                console.log("welcom dude")
+            })
+            // window.location="/chatroom/"+room;
         }}>JOIN</button>
-        
+
     </div>
 }
 

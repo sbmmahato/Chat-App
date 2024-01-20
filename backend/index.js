@@ -17,7 +17,12 @@ const io = require('socket.io')(http, {
 
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id} `);
-    socket.emit('message',`welcome ${socket.id}`);
+    // socket.emit('message',`welcome ${socket.id}`);
+    socket.on('join-room',(roomID)=>{
+      socket.join(roomID);
+      socket.to(roomID).emit('message');
+      
+    })
 });
 
 app.get('/api', (req, res) => {
