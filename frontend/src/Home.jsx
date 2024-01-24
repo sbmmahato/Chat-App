@@ -14,7 +14,7 @@ function Home(){
             socket.on('message',()=>{
                 console.log("welcom dude")
             })
-            // window.location="/chatroom/"+room;
+            window.location="/chatroom/"+room;
         }}>JOIN</button>
 
     </div>

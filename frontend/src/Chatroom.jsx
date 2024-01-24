@@ -4,15 +4,21 @@ import io from 'socket.io-client';
 const socket = io.connect('http://localhost:4000');
 import {useState,useEffect} from 'react';
 
+ let id=0;
+// const messages=[];
+
 // let { roomID } = useParams();
 
 function Chatroom() {
     const [chat,setChat]=useState('');
+    const [messages,setMessages]=useState([]);
  
     useEffect(()=>{
-        socket.on("message",(value)=>{
-            console.log(value);
-        })
+        socket.on("chat-recieved",(value)=>{
+            messages.push({value});
+            
+            console.log(messages);
+        }) 
     },[])
 
     
@@ -22,20 +28,33 @@ function Chatroom() {
     <input onChange={(e)=>{
         setChat(e.target.value);
     }}></input>
-    {/* <button onClick={()=>{
-        fetch('http://localhost:4000/roomID',{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json",
-                "room":roomID
-            }
-        }).then((data)=>{return data.json()}).then((value)=>{console.log(value)});
-    }}>SEND</button> */}
-
     <button onClick={()=>{
-        // socket.emit('join-room',)
+        socket.emit('chat',chat);
+        id++;                   
     }}>SEND</button>
+    {/* {messages[0]} */}
+    
+    {/* <Chats messages={messages} /> */}
+
+    <ul>
+        {messages.map(message => (
+          <div>{message.value}</div>
+        ))}
+      </ul>
     </div>
 }
 
 export default Chatroom
+
+function Chats(props){
+    
+    // props.messages.map(x=>{
+    //     return <div>{x}</div>
+    // })
+    for(let i=0;i<props.messages.length;i++){
+        return <div>
+            {props.messages[i]}
+        </div>
+    }
+    
+}

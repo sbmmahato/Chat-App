@@ -15,16 +15,34 @@ const io = require('socket.io')(http, {
     }
 });
 
+var roomid;
+
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id} `);
     // socket.emit('message',`welcome ${socket.id}`);
     socket.on('join-room',(roomID)=>{
+      // xyz=roomID;
       socket.join(roomID);
+      roomid=roomID;
       socket.to(roomID).emit('message');
-      
+      // socket.on('chat',(data)=>{console.log(data)})
+      console.log(roomid)
+    })
+    
+    socket.join(roomid);
+    socket.on('chat',(data)=>{
+       socket.to(roomid).emit('chat-recieved',data);
     })
 });
 
+// io.on('chat',(socket)=>{
+//   console.log('reached io.on 2nd')
+//   socket.on('chat',(data)=>{
+//     socket.to(roomid).emit('chat-recieved',data)
+//   })
+// })
+
+// console.log(xyz);
 app.get('/api', (req, res) => {
   res.json({
     message: 'Hello world',
