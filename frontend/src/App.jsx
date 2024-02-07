@@ -1,16 +1,21 @@
-import * as React from "react";
+import react from 'react';
+// import * as React from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './Home'
-import Chatroom from "./Chatroom";
-import { useState } from 'react'
+import Chatroom from './chatroom';
+import SelectRoom from './selectRoom';
+import Ui from './ui';
+import Registration from './Registration';
 
 function App() {
+
   return (
     <>
-    <BrowserRouter>
+      <BrowserRouter>
     <Routes>
-      <Route path='/' element={<Home/>} />
-      <Route path='/chatroom/:room' element={<Chatroom/>} />
+    <Route path='/' element={<SelectRoom />} />
+      <Route path='/chatroom/:room' element={<Chatroom />} />
+      <Route path='/ui' element={<Ui />} />
+      <Route path='/registration' element={<Registration />} />
     </Routes>
     </BrowserRouter>
     </>
