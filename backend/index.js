@@ -60,6 +60,14 @@ app.get('/chats',(req,res)=>{
     res.send(chats);
 })
 
+let z=5;
+app.post('/adduser',(req,res)=>{
+    let user={index:z,name:req.headers.name,chats:[]};
+    friendList.push(user);
+    z++;
+    res.send('User added');
+})
+
 // io.on("connection",(socket)=>{
 //     console.log(`User connected ${socket.id}`);
 //     socket.on('join-room',(value)=>{

@@ -12,7 +12,17 @@ function Registration(){
         Username:<input onChange={(e)=>{
             setUsername(e.target.value);
         }} /><br/>
-        <button>Submit</button>
+        <button onClick={()=>{
+            fetch('http://localhost:3000/adduser',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json',
+                    'name':name
+                }
+            }).then((data)=>{data.json()}).then((value)=>{
+                console.log(value);
+            })
+        }}>Submit</button>
     </div>
 }
 
