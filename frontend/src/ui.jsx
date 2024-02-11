@@ -73,7 +73,10 @@ export default function Ui(){
     // }, [chat]);
 
     useEffect(()=>{
-        socket.on('connect',()=>{console.log('connected: '+socket.id)});
+        socket.on('connect',()=>{console.log('connected: '+socket.id)
+            socket.emit('sending-id',{"name":username,"id":socket.id});
+        });console.log('yeahh')
+        
         socket.on('recieve-message',(data)=>{
             
             insertChatData(data);console.log(users)

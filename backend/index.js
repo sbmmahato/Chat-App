@@ -17,9 +17,9 @@ function checkIds(data,array){
             found=true;
             break;
         }
-        if(!found){
-            array.push(data)
-        }
+    }
+    if(!found){
+        array.push(data)
     }
 }
 
@@ -39,12 +39,26 @@ function findUser(value,arr){
     }
     return null;
 }
+//adding message to database below
+function addMessage(data,array){
+    
+    for(let i=0;i<array.length;i++){
+        if(array[i].name===data.from){
+            // addMessage(data.to,array[i].friendList)
+            for(let z=0;z<array[i].friendList.length;z++){
+                if(data.to===array[i].friendList.name){
+                    array[i].friendList.chats.push(data);
+                }
+            }
+        }
+    }
+}
 
 // const friendList=[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sattwik",chats:[]},{index:2 ,name:"Ayush",chats:[]},{index:3 ,name:"Sharvil",chats:[]},{index:4 ,name:"Naveen",chats:[]}]; 
 
 const userList=[
     {index:0,name:'Subham',friendList:[{index:0 ,name:"Sattwik",chats:[]},{index:1 ,name:"Ayush",chats:[]}]},
-    {index:1,name:'Sattwik',List:[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sharvil",chats:[]}]}
+    {index:1,name:'Sattwik',friendList:[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sharvil",chats:[]}]}
 ]
 
 const socketIds=[];
@@ -107,13 +121,22 @@ app.post('/adduser',(req,res)=>{
 
 io.on('connection',(socket)=>{
     console.log(`User connected ${socket.id}`);
+
+    socket.on('sending-id',(info)=>{
+        checkIds(info,socketIds);
+        console.log(socketIds);
+    })
+
     socket.on('sending-mssg',((data)=>{
         let datas={"name":data.from,"id":data.id}
-        checkIds(datas,socketIds);
-
+        // checkIds(datas,socketIds);
+            //  console.log(socketIds);
         let destination=findRecipient(data,socketIds);
+        console.log(destination);
+        // console.log(data.id);
         io.to(destination).to(data.id).emit('recieve-message',{"from":data.from,"to":data.to,"message":data.message});
-        console.log(data)
+        addMessage(data,userList)
+        // console.log(data)
         //after emit, in client side,  recieve message and push to message data where from =user name;
 
         //update database
