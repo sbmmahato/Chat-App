@@ -1,12 +1,12 @@
 import {Box} from "@mui/material";
-import {Outlet} from "react-router-dom";
+import {Outlet,useParams} from "react-router-dom";
 import {useState,useEffect,useMemo} from 'react';
 import {io} from "socket.io-client";
 
 export default function Ui(){
     // const [users,setUsers]=useState(["subham","sattwik","ayush","sharvil","naveen"]);
-
-    var username='Subham';
+    
+    let {username}=useParams();
 
     const socket=useMemo(()=>io("http://localhost:3000/"),[]
     );
@@ -19,7 +19,11 @@ export default function Ui(){
 
     useEffect(()=>{
         fetch('http://localhost:3000/users',{
-            method:'GET'
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'username':username
+            }
         }).then((data)=>{return data.json()}).then((value)=>{
             console.log(value)
             setUsers(value);
@@ -133,7 +137,7 @@ export default function Ui(){
         
         <button onClick={()=>{
             socket.emit('sending-mssg',{"from":username,"to":users[selecter].name,"message":message,"id":socket.id});
-        }}>send</button>
+        }}>send</button>{username}
         </div> 
 
     </div>

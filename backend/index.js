@@ -31,9 +31,24 @@ function findRecipient(value,array){
     }
 }
 
-const friendList=[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sattwik",chats:[]},{index:2 ,name:"Ayush",chats:[]},{index:3 ,name:"Sharvil",chats:[]},{index:4 ,name:"Naveen",chats:[]}]; 
+function findUser(value,arr){
+    for(let i=0;i<arr.length;i++){
+        if(value===arr[i].name){
+            return arr[i];
+        }
+    }
+    return null;
+}
+
+// const friendList=[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sattwik",chats:[]},{index:2 ,name:"Ayush",chats:[]},{index:3 ,name:"Sharvil",chats:[]},{index:4 ,name:"Naveen",chats:[]}]; 
+
+const userList=[
+    {index:0,name:'Subham',friendList:[{index:0 ,name:"Sattwik",chats:[]},{index:1 ,name:"Ayush",chats:[]}]},
+    {index:1,name:'Sattwik',List:[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sharvil",chats:[]}]}
+]
 
 const socketIds=[];
+
 
 // const chats= [{name:'Subham',message:"hello hru"},{name:'Ayush',message:"kya kr he ho"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"}];
 
@@ -52,9 +67,17 @@ app.get('/',(req,res)=>{
     res.send("yoo");
 })
 
-app.get('/users',(req,res)=>{
-    res.send(friendList);
+app.post('/users',(req,res)=>{
+    let x=req.headers.username;
+    // console.log(x)
+    let a=findUser(x,userList);
+    console.log(a.friendList);
+    res.send(a.friendList);
 })
+
+// app.post('/getusers',(req,res)=>{
+//     const username=req.headers.
+// })
 
 app.get('/chats',(req,res)=>{
     res.send(chats);
