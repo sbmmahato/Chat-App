@@ -1,5 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
+
 // const PORT = 4000;
 
 
@@ -61,8 +63,17 @@ const userList=[
     {index:1,name:'Sattwik',friendList:[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sharvil",chats:[]}]}
 ]
 
+const userSchema=new mongoose.Schema({
+    index: mongoose.Schema.Types.ObjectId,
+    name: String,
+    friendList: [{
+        index: mongoose.Schema.Types.ObjectId,name: String,chats: [{from: String,to: String,message: String}]
+    }]
+});
+
 const socketIds=[];
 
+const User = mongoose.model('User',userSchema);
 
 // const chats= [{name:'Subham',message:"hello hru"},{name:'Ayush',message:"kya kr he ho"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"}];
 
@@ -130,7 +141,7 @@ io.on('connection',(socket)=>{
     socket.on('sending-mssg',((data)=>{
         let datas={"name":data.from,"id":data.id}
         // checkIds(datas,socketIds);
-            //  console.log(socketIds);
+            //  console.log(socketIds);     
         let destination=findRecipient(data,socketIds);
         console.log(destination);
         // console.log(data.id);
