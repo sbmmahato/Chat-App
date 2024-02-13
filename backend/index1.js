@@ -45,19 +45,19 @@ function findUser(value,arr){
     return null;
 }
 //adding message to database below
-function addMessage(data,array){
+// function addMessage(data,array){
     
-    for(let i=0;i<array.length;i++){
-        if(array[i].name===data.from){
-            // addMessage(data.to,array[i].friendList)
-            for(let z=0;z<array[i].friendList.length;z++){
-                if(data.to===array[i].friendList.name){
-                    array[i].friendList.chats.push(data);
-                }
-            }
-        }
-    }
-}
+//     for(let i=0;i<array.length;i++){
+//         if(array[i].name===data.from){
+//             // addMessage(data.to,array[i].friendList)
+//             for(let z=0;z<array[i].friendList.length;z++){
+//                 if(data.to===array[i].friendList.name){
+//                     array[i].friendList.chats.push(data);
+//                 }
+//             }
+//         }
+//     }
+// }
 
 
 // const userList=[
@@ -170,7 +170,7 @@ io.on('connection',(socket)=>{
         let sender=await userlist.findOne({name:data.from});
         if(sender){
             sender.friendList.forEach((friend)=>{
-                if(friend.name===data.from){
+                if(friend.name===data.to){
                     friend.chats.push(data);
                 }
             })
@@ -180,7 +180,7 @@ io.on('connection',(socket)=>{
         let reciever=await userlist.findOne({name:data.to});
         if(reciever){
             reciever.friendList.forEach((friend)=>{
-                if(friend.name===data.to){
+                if(friend.name===data.from){
                     friend.chats.push(data);
                 }
             })
