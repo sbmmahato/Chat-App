@@ -25,6 +25,7 @@ function checkIds(data,array){
     }
 }
 
+
 function findRecipient(value,array){
     for(let i=0;i<array.length;i++){
         if(array[i].name===value.to){
@@ -66,9 +67,9 @@ const userList=[
 const userSchema=new mongoose.Schema({
     index: mongoose.Schema.Types.ObjectId,
     name: String,
-    friendList: [{
-        index: mongoose.Schema.Types.ObjectId,name: String,chats: [{from: String,to: String,message: String}]
-    }]
+    friendList: {
+        index: mongoose.Schema.Types.ObjectId,name: String,chats: {from: String,to: String,message: String}
+    }
 });
 
 const socketIds=[];
