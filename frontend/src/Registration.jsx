@@ -19,7 +19,7 @@ function Registration(){
                     'Content-Type':'application/json',
                     'name':name
                 }
-            }).then((data)=>{data.json()}).then((value)=>{
+            }).then((data)=>{return data.json()}).then((value)=>{
                 console.log(value);
             })
         }}>Submit</button>

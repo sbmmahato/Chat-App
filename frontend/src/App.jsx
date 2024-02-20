@@ -6,6 +6,7 @@ import SelectRoom from './selectRoom';
 import Ui from './ui';
 import Registration from './Registration';
 import Login from './Login';
+import FriendReq from './FriendReq';
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
       <Route path='/ui/:username' element={<Ui />} />
       <Route path='/registration' element={<Registration />} />
       <Route path='/login' element={<Login />} />
+      {/* <Route path='/friendReq' element={<FriendReq />} /> */}
+      <Route path='/friendReq/:username' element={<FriendReq />} /> 
     </Routes>
     </BrowserRouter>
     </>

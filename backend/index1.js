@@ -69,7 +69,8 @@ const userSchema=new mongoose.Schema({
     name: String,
     friendList: [{
         index: Number,name: String,chats: [{from: String,to: String,message: String}]
-    }]
+    }],
+    friendReq: [{sender: String,reciever: String,accepted: String}]
 });
 
 const socketIds=[];
@@ -122,7 +123,7 @@ app.post('/adduser',async (req,res)=>{
     // friendList.push(user);
     // z++;
     // res.send('User added');
-    let q=req.headers.username;
+    let q=req.headers.name;
     const newUser=await userlist.create({
         name: q,
         friendList: []
@@ -143,6 +144,22 @@ app.post('/adduser',async (req,res)=>{
 //     })  
 
 // })
+
+app.post('/sendingfriendreq',async (req,res)=>{
+    // let sender=req.headers.sender;
+    // let reciever=req.headers.reciever;
+    let sender = await userlist.findOne({name:req.headers.sender});
+    let reciever = await userlist.findOne({name:req.headers.reciever});
+
+    if(sender && reciever){
+        sender.friendReq.push({sender:req.headers.sender,reciever:req.headers.reciever});
+        reciever.friendReq.push({sender:req.headers.sender,reciever:req.headers.reciever});
+        await sender.save();
+        await reciever.save();
+        
+        res.send('friend req sent');
+    }
+})
 
 io.on('connection',(socket)=>{
     console.log(`User connected ${socket.id}`);
