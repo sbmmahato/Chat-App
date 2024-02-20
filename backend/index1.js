@@ -44,6 +44,14 @@ function findUser(value,arr){
     }
     return null;
 }
+
+function findIndex(value,arr){
+    for(let i=0;i<arr.length;i++){
+        if(arr[i].sender===value.sender && arr[i].reciever===value.reciever){
+            return i;
+        }
+    }
+}
 //adding message to database below
 // function addMessage(data,array){
     
@@ -70,7 +78,7 @@ const userSchema=new mongoose.Schema({
     friendList: [{
         index: Number,name: String,chats: [{from: String,to: String,message: String}]
     }],
-    friendReq: [{sender: String,reciever: String,accepted: String}]
+    friendReq: [{sender: String,reciever: String}]
 });
 
 const socketIds=[];
@@ -131,6 +139,30 @@ app.post('/adduser',async (req,res)=>{
     return res.send("done");
 })
 
+app.post('/acceptingfriendreq',async (req,res)=>{
+    let sender1 = await userlist.findOne({name:req.headers.sender});
+    let reciever1 = await userlist.findOne({name:req.headers.reciever});
+
+    // await sender1.friendReq.findOneAndDelete({sender:req.headers.sender,reciever:req.headers.reciever});
+
+    // await reciever1.friendReq.findOneAndDelete({sender:req.headers.sender,reciever:req.headers.reciever});
+
+    let a=findIndex(req.headers,sender1.friendReq);
+    let b=findIndex(req.headers,reciever1.friendReq);
+
+    sender1.friendReq.splice(a,1);
+    reciever1.friendReq.splice(b,1);
+
+    sender1.friendList.push({name:req.headers.reciever,chats:[]});
+
+    reciever1.friendList.push({name:req.headers.sender,chats:[]})  
+
+    await sender1.save();
+    await reciever1.save();
+
+    res.send("added in friendlist")
+})
+
 // io.on("connection",(socket)=>{
 //     console.log(`User connected ${socket.id}`);
 //     socket.on('join-room',(value)=>{
@@ -146,8 +178,6 @@ app.post('/adduser',async (req,res)=>{
 // })
 
 app.post('/sendingfriendreq',async (req,res)=>{
-    // let sender=req.headers.sender;
-    // let reciever=req.headers.reciever;
     let sender = await userlist.findOne({name:req.headers.sender});
     let reciever = await userlist.findOne({name:req.headers.reciever});
 
