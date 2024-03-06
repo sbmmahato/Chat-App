@@ -93,7 +93,12 @@ export default function Ui(){
         <Box sx={{height:"100vh",width:350}}>
             <Box sx={{border:"1px solid black",height:100}}>
                 {/* User details here */}
-                     
+                     {username}<br/>
+
+                    <button onClick={()=>{
+                        window.location='/friendReq/'+username;
+                    }} >Friend Reqs</button>
+
             </Box><br/>
 
             {users.map((user)=>(
@@ -140,7 +145,7 @@ export default function Ui(){
         
         <button onClick={()=>{
             socket.emit('sending-mssg',{"from":username,"to":users[selecter].name,"message":message,"id":socket.id});
-        }}>send</button>{username}
+        }}>send</button>
         </div> 
 
     </div>

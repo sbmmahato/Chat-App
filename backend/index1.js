@@ -191,6 +191,10 @@ app.post('/sendingfriendreq',async (req,res)=>{
     }
 })
 
+// app.get('/gettingreqsreceived',async (req,res)=>{
+    
+// })
+
 io.on('connection',(socket)=>{
     console.log(`User connected ${socket.id}`);
 
