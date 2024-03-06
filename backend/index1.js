@@ -191,9 +191,13 @@ app.post('/sendingfriendreq',async (req,res)=>{
     }
 })
 
-// app.get('/gettingreqsreceived',async (req,res)=>{
-    
-// })
+app.post('/gettingreqsreceived',async (req,res)=>{
+    let q=req.headers.name;
+    let z=await userlist.findOne({name:req.headers.name});
+    if(z){
+        res.send(z.friendReq);
+    }
+})
 
 io.on('connection',(socket)=>{
     console.log(`User connected ${socket.id}`);
