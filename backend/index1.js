@@ -1,9 +1,10 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const app = express();
 
 // const PORT = 4000;
-
+const SECRET = 'abcd1589qwerty';
 
 const http = require('http').Server(app);
 const cors = require('cors');
@@ -81,6 +82,22 @@ const userSchema=new mongoose.Schema({
     friendReq: [{sender: String,reciever: String}]
 });
 
+const authenticateJwt = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.split(' ')[1];
+      jwt.verify(token, SECRET, (err, user) => {
+        if (err) {
+          return res.sendStatus(403);
+        }
+        req.user = user;
+        next();
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  };
+
 const socketIds=[];
 
 const userlist = mongoose.model('userlist',userSchema);
@@ -102,7 +119,7 @@ app.get('/',(req,res)=>{
     res.send("yoo");
 })
 
-app.post('/users',async (req,res)=>{
+app.get('/users',authenticateJwt,async (req,res)=>{
     let username=req.headers.username;
     let user=await userlist.findOne({name:username});console.log(user);
     if(user){
@@ -136,10 +153,23 @@ app.post('/adduser',async (req,res)=>{
         name: q,
         friendList: []
     })
-    return res.send("done");
+
+    const token=jwt.sign({username:q}, SECRET, {expiresIn: '1h'});
+    res.json({message:"done",token});
 })
 
-app.post('/acceptingfriendreq',async (req,res)=>{
+app.post('/login',async (req,res)=>{
+    let found=await userlist.findOne({name:req.headers.name});
+    if(found){
+        const token = jwt.sign({ name:req.headers.name }, SECRET, { expiresIn: '1h' });
+        
+        res.json({message:'Logged in successfully',token});
+    }else{
+        res.json({message:'Invalid Credentials'})
+    }
+})
+
+app.post('/acceptingfriendreq',authenticateJwt,async (req,res)=>{
     let sender1 = await userlist.findOne({name:req.headers.sender});
     let reciever1 = await userlist.findOne({name:req.headers.reciever});
 
@@ -177,7 +207,7 @@ app.post('/acceptingfriendreq',async (req,res)=>{
 
 // })
 
-app.post('/sendingfriendreq',async (req,res)=>{
+app.post('/sendingfriendreq',authenticateJwt,async (req,res)=>{
     let sender = await userlist.findOne({name:req.headers.sender});
     let reciever = await userlist.findOne({name:req.headers.reciever});
 
@@ -191,7 +221,7 @@ app.post('/sendingfriendreq',async (req,res)=>{
     }
 })
 
-app.post('/gettingreqsreceived',async (req,res)=>{
+app.post('/gettingreqsreceived',authenticateJwt,async (req,res)=>{
     let q=req.headers.name;
     let z=await userlist.findOne({name:req.headers.name});
     if(z){

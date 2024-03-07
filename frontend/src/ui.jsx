@@ -19,10 +19,11 @@ export default function Ui(){
 
     useEffect(()=>{
         fetch('http://localhost:3000/users',{
-            method:'POST',
+            method:'GET',
             headers:{
                 'Content-Type':'application/json',
-                'username':username
+                'username':username,
+                'authorization':'Bearer '+localStorage.getItem('token')
             }
         }).then((data)=>{return data.json()}).then((value)=>{
             console.log(value)

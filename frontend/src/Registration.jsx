@@ -21,6 +21,9 @@ function Registration(){
                 }
             }).then((data)=>{return data.json()}).then((value)=>{
                 console.log(value);
+                localStorage.setitem('token',value.token);
+                
+                window.location='/ui/'+name;
             })
         }}>Submit</button>
     </div>
