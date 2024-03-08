@@ -76,6 +76,7 @@ function findIndex(value,arr){
 
 const userSchema=new mongoose.Schema({
     name: String,
+    password: String,
     friendList: [{
         index: Number,name: String,chats: [{from: String,to: String,message: String}]
     }],
@@ -151,6 +152,7 @@ app.post('/adduser',async (req,res)=>{
     let q=req.headers.name;
     const newUser=await userlist.create({
         name: q,
+        password:req.headers.password,
         friendList: []
     })
 
@@ -159,7 +161,7 @@ app.post('/adduser',async (req,res)=>{
 })
 
 app.post('/login',async (req,res)=>{
-    let found=await userlist.findOne({name:req.headers.name});
+    let found=await userlist.findOne({name:req.headers.name,password:req.headers.password});
     if(found){
         const token = jwt.sign({ name:req.headers.name }, SECRET, { expiresIn: '1h' });
         

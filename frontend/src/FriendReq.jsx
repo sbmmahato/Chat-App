@@ -12,11 +12,17 @@ function FriendReq(){
          method:'POST',
          headers:{
             'Content-Type':'application/json',
-            'name':username
+            'name':username,
+            'authorization':'Bearer '+localStorage.getItem('token')
          }
       }).then((data)=>{return data.json()}).then((x)=>{
-         setName(x);
-         console.log(x);
+         // setName(x);
+         const newX=x.map(function(y){
+            if(y.sender !== username){
+               return y;
+            }
+         })
+         setName(newX);
       })
    },[]) 
    
@@ -31,7 +37,8 @@ function FriendReq(){
             headers:{
                'Content-Type':'application/json',
                'sender':username,
-               'reciever':user 
+               'reciever':user,
+               'authorization':'Bearer '+localStorage.getItem('token')
             }
          }).then((data)=>{return data.json() }).then((value)=>{
             console.log(value);
@@ -40,7 +47,7 @@ function FriendReq(){
         {/* <UserCard user={user}/> */}
      </div>
      <div>
-      {name && name.map((x,index)=>(<UserCard key={index} user={x}/>))}
+      {name && name.map((x,index)=>(<UserCard key={index} user={x} />))}
       </div></div>
 }
 
@@ -53,7 +60,8 @@ function UserCard(props){
             headers:{
                'Content-Type':'application/json',
                'sender':props.user.sender,
-               'reciever':props.user.reciever
+               'reciever':props.user.reciever,
+               'authorization':'Bearer '+localStorage.getItem('token')
             }
          }).then((data)=>{return data.json()}).then((value)=>{console.log(value)})
       }}>Accept</button>
