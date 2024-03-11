@@ -63,7 +63,7 @@ export default function Ui(){
 
     useEffect(()=>{
         for(let i=0;i<users.length;i++){
-            if(users[i].index===selecter){
+            if(i===selecter){
                 setChat(users[i].chats);
             }else{console.log("not")}
         }
@@ -89,10 +89,11 @@ export default function Ui(){
     },[])
     
 
-    return <div style={{paddingLeft:"30vh",paddingRight:"10vh",display:'flex',justifyContent:"center",position:'fixed'}}>
+    return <div style={{paddingLeft:"30vh",paddingRight:"30vh",display:'flex',justifyContent:"center",position:'fixed',backgroundColor:'#252837',top:
+    '0px',left:'0px', right:'0px'}}>
         <div style={{overflowY:'auto'}}>
         <Box sx={{height:"100vh",width:350}}>
-            <Box sx={{border:"1px solid black",height:100}}>
+            <Box sx={{border:"1px solid black",height:100,backgroundColor:'#303346'}}>
                 {/* User details here */}
                      {username}<br/>
 
@@ -102,13 +103,13 @@ export default function Ui(){
 
             </Box><br/>
 
-            {users.map((user)=>(
-                <Box sx={{border:"1px solid black",height:100,borderRadius:3,margin:0.5,
+            {users.map((user,index)=>(
+                <Box sx={{border:"1px solid black",height:70,borderRadius:3,margin:0.5,color:'white',textAlign:'center', fontSize: '1.5em',
                 '&:hover': {
-                  bgcolor:'#EEEDEB',
-                }}} key={user.index} onClick={()=>{setSelecter(user.index);}}>
-                    {selecter===user.index ? (
-                        <div style={{height:100,borderRadius:10,margin:0.5,backgroundColor:'#F5EEE6'}}>{user.name}</div>
+                  bgcolor:'#2f3241',
+                }}} key={index} onClick={()=>{setSelecter(index);}}>
+                    {selecter===index ? (
+                        <div style={{height:70,borderRadius:10,backgroundColor:'#6785ff'}}>{user.name}</div>
                     ) : (
                         <div>{user.name}</div>
                     )}
@@ -119,19 +120,20 @@ export default function Ui(){
 
 
         <div>
-        <Box sx={{border:"1px solid black",height:'12.7vh',width:"100vh",borderRadius:3,margin:0.5}}>
+        <Box sx={{border:"1px solid black",height:'12.7vh',width:"100vh",borderRadius:3,margin:0.5,backgroundColor:'#303346'}}>
         </Box>
 
-        <Box sx={{border:"1px solid black",height:"70.7vh",width:"100vh",borderRadius:3,margin:0.5,overflowY:'auto'}}>
+        <Box sx={{border:"1px solid black",height:"70.7vh",width:"100vh",borderRadius:3,margin:0.5,overflowY:'auto',backgroundColor:'#1d1f2b'}}>
             
         {selecter != null && chat.map((x,index)=>(<div key={index}>{
             x.from===username ? (
-                <div style={{justifyContent:"flex-end",display:"flex"}}> 
-                    <ShowMessage mssg={x.message}/>
+                <div style={{justifyContent:"flex-end",display:"flex",padding:'0.5vh'}}> 
+                    <ShowMessage mssg={x.message} color={'#6785ff'}/>
                 </div>
             ) : (
-                <div style={{justifyContent:"flex-start",display:"flex"}}>
-                    <ShowMessage mssg={x.message}/>     
+                <div style={{justifyContent:"flex-start",display:"flex",padding:'0.5vh'}}>
+                    <ShowMessage mssg={x.message} color={'#303346'
+}/>     
                 </div>
             )
         }</div>))}
@@ -142,11 +144,11 @@ export default function Ui(){
         {/* <Box sx={{border:"1px solid black",height:"9vh",width:"100vh",borderRadius:3,margin:0.5}}>
 
         </Box> */}
-        <input style={{border:"1px solid black",height:"9vh",width:"100vh",borderRadius:12,margin:2.5}} onChange={(e)=>{setMessage(e.target.value)}}></input>
+        <input style={{border:"1px solid black",height:"7vh",width:"92vh",borderRadius:12,margin:2.5,backgroundColor:'#303346',color:'white'}} onChange={(e)=>{setMessage(e.target.value)}}></input>
         
-        <button onClick={()=>{
+        <button style={{height:'7vh',width:'7vh',borderRadius:'2vh',backgroundColor:'#6785ff',color:'white'}} onClick={()=>{
             socket.emit('sending-mssg',{"from":username,"to":users[selecter].name,"message":message,"id":socket.id});
-        }}>send</button>
+        }}><b>SEND</b></button>
         </div> 
 
     </div>
@@ -154,7 +156,7 @@ export default function Ui(){
 
 
 function ShowMessage(props){
-    return <div style={{border:"1px solid black",width:"25vh",height:"5vh"}}>
+    return <div style={{border:"1px solid black",backgroundColor:props.color,padding:'2vh',borderRadius:'1vh',color:'#FFFFFF'}}>
         {props.mssg}
     </div>
 }

@@ -55,7 +55,7 @@ function UserCard(props){
    return <div style={{border:'1px solid black',height:'100px',width:'270px'}}>
       {props.user.sender}<br/>
       <button  onClick={()=>{
-         fetch('http://localhost:3000/acceptingfriendreq',{
+         fetch('http://localhost:3000/acceptingfriendreq',{ 
             method:'POST',
             headers:{
                'Content-Type':'application/json',
