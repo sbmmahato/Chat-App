@@ -9,9 +9,16 @@ const SECRET = 'abcd1589qwerty';
 const http = require('http').Server(app);
 const cors = require('cors');
 
+app.options("",cors({
+    origin:"*",
+    credential:true,
+    methods:["GET","POST","PUT","DELETE"]
+}))
+
 app.use(cors({
-    origin:"https://hello-chat-silk.vercel.app",
-    credentials:true
+    origin:"*",
+    credential:true,
+    methods:["GET","POST","PUT","DELETE"]
 }));
 app.use(express.json());
 
