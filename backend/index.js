@@ -112,7 +112,7 @@ const io = require('socket.io')(http, {
 });
 
 app.use(cors({
-    origin:"https://hello-chat-silk.vercel.app/",
+    origin:["https://hello-chat-silk.vercel.app/"],
     credentials:true
 }));
 
