@@ -1,8 +1,8 @@
 import react from 'react';
 // import * as React from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Chatroom from './chatroom';
-import SelectRoom from './selectRoom';
+// import Chatroom from './chatroom';
+// import SelectRoom from './selectRoom';
 import Ui from './ui';
 import Registration from './Registration';
 import Login from './Login';
