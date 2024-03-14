@@ -8,9 +8,29 @@
     ],
     "routes": [
     {
-    "src": "/(.*)",
+    "src": "/",
     "dest": "/",
     "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
-    }
+    },
+    {
+        "src": "/ui/:username",
+        "dest": "/",
+        "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
+        },
+        {
+            "src": "/registration",
+            "dest": "/",
+            "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
+            },
+            {
+                "src": "/login",
+                "dest": "/",
+                "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
+                },
+                {
+                    "src": "/friendReq/:username",
+                    "dest": "/",
+                    "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
+                    }
     ]
     }
