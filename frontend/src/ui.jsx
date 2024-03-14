@@ -8,7 +8,7 @@ export default function Ui(){
     
     let {username}=useParams();
 
-    const socket=useMemo(()=>io("https://sbm-hello-chat.vercel.app/"),[]
+    const socket=useMemo(()=>io("https://sbm-hello-chat.onrender.com/"),[]
     );
 
     const [chat,setChat]=useState([]);
@@ -18,7 +18,7 @@ export default function Ui(){
     // http://localhost:3000/users
     
     useEffect(()=>{
-        fetch('https://sbm-hello-chat.vercel.app/users',{
+        fetch('https://sbm-hello-chat.onrender.com/users',{
             method:'GET',
             headers:{
                 'Content-Type':'application/json',

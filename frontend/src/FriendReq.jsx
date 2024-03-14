@@ -8,7 +8,7 @@ function FriendReq(){
    const [name,setName]=useState([]);
 
    useEffect(()=>{
-      fetch('https://sbm-hello-chat.vercel.app/gettingreqsreceived',{
+      fetch('https://sbm-hello-chat.onrender.com/gettingreqsreceived',{
          method:'POST',
          headers:{
             'Content-Type':'application/json',

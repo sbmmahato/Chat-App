@@ -19,7 +19,7 @@ function Registration(){
         <TextField fullWidth id="outlined-basic" label="Username" variant="outlined" onChange={(e)=>{setName(e.target.value)}}/><br/><br/>
         <TextField fullWidth id="outlined-basic" label="Password" variant="outlined" onChange={(e)=>{setPassword(e.target.value)}}/><br/><br/>
         <Button variant="contained" onClick={()=>{
-            fetch('https://sbm-hello-chat.vercel.app/adduser',{
+            fetch('https://sbm-hello-chat.onrender.com/adduser',{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json',
