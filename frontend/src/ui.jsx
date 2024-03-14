@@ -8,17 +8,17 @@ export default function Ui(){
     
     let {username}=useParams();
 
-    const socket=useMemo(()=>io("http://localhost:3000/"),[]
+    const socket=useMemo(()=>io("https://sbm-hello-chat.vercel.app/"),[]
     );
 
     const [chat,setChat]=useState([]);
     const [users,setUsers]=useState([]);
     const [selecter,setSelecter] = useState(null);
     const [message,setMessage]=useState('');
-
-
+    // http://localhost:3000/users
+    
     useEffect(()=>{
-        fetch('http://localhost:3000/users',{
+        fetch('https://sbm-hello-chat.vercel.app/users',{
             method:'GET',
             headers:{
                 'Content-Type':'application/json',
@@ -160,3 +160,5 @@ function ShowMessage(props){
         {props.mssg}
     </div>
 }
+
+//2

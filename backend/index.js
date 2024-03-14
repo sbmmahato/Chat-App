@@ -1,15 +1,18 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const app = express();
 
 // const PORT = 4000;
-
+const SECRET = 'abcd1589qwerty';
 
 const http = require('http').Server(app);
 const cors = require('cors');
 
 app.use(cors());
 app.use(express.json());
+
+mongoose.connect('mongodb+srv://sbmmahato:subhammahbus@chatdb.2qwk0rv.mongodb.net/chatDB?retryWrites=true&w=majority').then(()=>{console.log('mongodb  connected')})
 
 function checkIds(data,array){
     let found=false;
@@ -42,39 +45,63 @@ function findUser(value,arr){
     }
     return null;
 }
-//adding message to database below
-function addMessage(data,array){
-    
-    for(let i=0;i<array.length;i++){
-        if(array[i].name===data.from){
-            // addMessage(data.to,array[i].friendList)
-            for(let z=0;z<array[i].friendList.length;z++){
-                if(data.to===array[i].friendList.name){
-                    array[i].friendList.chats.push(data);
-                }
-            }
+
+function findIndex(value,arr){
+    for(let i=0;i<arr.length;i++){
+        if(arr[i].sender===value.sender && arr[i].reciever===value.reciever){
+            return i;
         }
     }
 }
+//adding message to database below
+// function addMessage(data,array){
+    
+//     for(let i=0;i<array.length;i++){
+//         if(array[i].name===data.from){
+//             // addMessage(data.to,array[i].friendList)
+//             for(let z=0;z<array[i].friendList.length;z++){
+//                 if(data.to===array[i].friendList.name){
+//                     array[i].friendList.chats.push(data);
+//                 }
+//             }
+//         }
+//     }
+// }
 
-// const friendList=[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sattwik",chats:[]},{index:2 ,name:"Ayush",chats:[]},{index:3 ,name:"Sharvil",chats:[]},{index:4 ,name:"Naveen",chats:[]}]; 
 
-const userList=[
-    {index:0,name:'Subham',friendList:[{index:0 ,name:"Sattwik",chats:[]},{index:1 ,name:"Ayush",chats:[]}]},
-    {index:1,name:'Sattwik',friendList:[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sharvil",chats:[]}]}
-]
+// const userList=[
+//     {index:0,name:'Subham',friendList:[{index:0 ,name:"Sattwik",chats:[]},{index:1 ,name:"Ayush",chats:[]}]},
+//     {index:1,name:'Sattwik',friendList:[{index:0 ,name:"Subham",chats:[]},{index:1 ,name:"Sharvil",chats:[]}]}
+// ]
 
 const userSchema=new mongoose.Schema({
-    index: mongoose.Schema.Types.ObjectId,
     name: String,
-    friendList: {
-        index: mongoose.Schema.Types.ObjectId,name: String,chats: {from: String,to: String,message: String}
-    }
+    password: String,
+    friendList: [{
+        index: Number,name: String,chats: [{from: String,to: String,message: String}]
+    }],
+    friendReq: [{sender: String,reciever: String}]
 });
+
+const authenticateJwt = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.split(' ')[1];
+      jwt.verify(token, SECRET, (err, user) => {
+        if (err) {
+          return res.sendStatus(403);
+        }
+        req.user = user;
+        next();
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  };
 
 const socketIds=[];
 
-const User = mongoose.model('User',userSchema);
+const userlist = mongoose.model('userlist',userSchema);
 
 // const chats= [{name:'Subham',message:"hello hru"},{name:'Ayush',message:"kya kr he ho"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"},{name:'Subham',message:"hello hru"}];
 
@@ -93,12 +120,19 @@ app.get('/',(req,res)=>{
     res.send("yoo");
 })
 
-app.post('/users',(req,res)=>{
-    let x=req.headers.username;
-    // console.log(x)
-    let a=findUser(x,userList);
-    console.log(a.friendList);
-    res.send(a.friendList);
+app.get('/users',authenticateJwt,async (req,res)=>{
+    let username=req.headers.username;
+    let user=await userlist.findOne({name:username});console.log(user);
+    if(user){
+        res.send(user.friendList);
+    }else{
+        res.status(404).send("not found");
+    }
+    // console.log(x)   
+    // let a=findUser(x,userList);
+    // console.log(a.friendList);
+
+    // res.send(a.friendList);
 })
 
 // app.post('/getusers',(req,res)=>{
@@ -110,11 +144,55 @@ app.get('/chats',(req,res)=>{
 })
 
 let z=5;
-app.post('/adduser',(req,res)=>{
-    let user={index:z,name:req.headers.name,chats:[]};
-    friendList.push(user);
-    z++;
-    res.send('User added');
+app.post('/adduser',async (req,res)=>{
+    // let user={index:z,name:req.headers.name,chats:[]};
+    // friendList.push(user);
+    // z++;
+    // res.send('User added');
+    let q=req.headers.name;
+    const newUser=await userlist.create({
+        name: q,
+        password:req.headers.password,
+        friendList: []
+    })
+
+    const token=jwt.sign({username:q}, SECRET, {expiresIn: '1h'});
+    res.json({message:"done",token});
+})
+
+app.post('/login',async (req,res)=>{
+    let found=await userlist.findOne({name:req.headers.name,password:req.headers.password});
+    if(found){
+        const token = jwt.sign({ name:req.headers.name }, SECRET, { expiresIn: '1h' });
+        
+        res.json({message:'Logged in successfully',token});
+    }else{
+        res.json({message:'Invalid Credentials'})
+    }
+})
+
+app.post('/acceptingfriendreq',authenticateJwt,async (req,res)=>{
+    let sender1 = await userlist.findOne({name:req.headers.sender});
+    let reciever1 = await userlist.findOne({name:req.headers.reciever});
+
+    // await sender1.friendReq.findOneAndDelete({sender:req.headers.sender,reciever:req.headers.reciever});
+
+    // await reciever1.friendReq.findOneAndDelete({sender:req.headers.sender,reciever:req.headers.reciever});
+
+    let a=findIndex(req.headers,sender1.friendReq);
+    let b=findIndex(req.headers,reciever1.friendReq);
+
+    sender1.friendReq.splice(a,1);
+    reciever1.friendReq.splice(b,1);
+
+    sender1.friendList.push({name:req.headers.reciever,chats:[]});
+
+    reciever1.friendList.push({name:req.headers.sender,chats:[]})  
+
+    await sender1.save();
+    await reciever1.save();
+
+    res.send("added in friendlist")
 })
 
 // io.on("connection",(socket)=>{
@@ -131,6 +209,28 @@ app.post('/adduser',(req,res)=>{
 
 // })
 
+app.post('/sendingfriendreq',authenticateJwt,async (req,res)=>{
+    let sender = await userlist.findOne({name:req.headers.sender});
+    let reciever = await userlist.findOne({name:req.headers.reciever});
+
+    if(sender && reciever){
+        sender.friendReq.push({sender:req.headers.sender,reciever:req.headers.reciever});
+        reciever.friendReq.push({sender:req.headers.sender,reciever:req.headers.reciever});
+        await sender.save();
+        await reciever.save();
+        
+        res.send('friend req sent');
+    }
+})
+
+app.post('/gettingreqsreceived',authenticateJwt,async (req,res)=>{
+    let q=req.headers.name;
+    let z=await userlist.findOne({name:req.headers.name});
+    if(z){
+        res.send(z.friendReq);
+    }
+})
+
 io.on('connection',(socket)=>{
     console.log(`User connected ${socket.id}`);
 
@@ -139,15 +239,45 @@ io.on('connection',(socket)=>{
         console.log(socketIds);
     })
 
-    socket.on('sending-mssg',((data)=>{
-        let datas={"name":data.from,"id":data.id}
+    socket.on('sending-mssg',(async (data)=>{
+        // let datas={"name":data.from,"id":data.id}
         // checkIds(datas,socketIds);
-            //  console.log(socketIds);     
-        let destination=findRecipient(data,socketIds);
-        console.log(destination);
+            //  console.log(socketIds);  
+
+        // let destination=findRecipient(data,socketIds);
+        // console.log(destination);
+
         // console.log(data.id);
+
+        // io.to(destination).to(data.id).emit('recieve-message',{"from":data.from,"to":data.to,"message":data.message});
+
+        // addMessage(data,userList)
+
+        //for sender chat update in mongodb
+        let sender=await userlist.findOne({name:data.from});
+        if(sender){
+            sender.friendList.forEach((friend)=>{
+                if(friend.name===data.to){
+                    friend.chats.push(data);
+                }
+            })
+        }
+        await sender.save();
+        //for reciever chat update in mongodb
+        let reciever=await userlist.findOne({name:data.to});
+        if(reciever){
+            reciever.friendList.forEach((friend)=>{
+                if(friend.name===data.from){
+                    friend.chats.push(data);
+                }
+            })
+        }
+        await reciever.save();
+
+        let destination=await findRecipient(data,socketIds);
+
         io.to(destination).to(data.id).emit('recieve-message',{"from":data.from,"to":data.to,"message":data.message});
-        addMessage(data,userList)
+
         // console.log(data)
         //after emit, in client side,  recieve message and push to message data where from =user name;
 

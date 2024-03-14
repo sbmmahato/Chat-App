@@ -14,7 +14,7 @@ function Login(){
         <TextField fullWidth id="outlined-basic" label="Password" variant="outlined" onChange={(e)=>{setPassword(e.target.value)}}/><br/><br/>
 
         <Button variant="contained" onClick={()=>{
-            fetch('http://localhost:3000/login',{
+            fetch('https://sbm-hello-chat.vercel.app/login',{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json',
