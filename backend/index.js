@@ -134,11 +134,12 @@ const userlist = mongoose.model('userlist',userSchema);
 
 const io = require('socket.io')(http, {
     cors: {
-        origin: ["*","https://hello-chat-silk.vercel.app","https://sbm-hello-chat.vercel.app"],
+        origin: "*",
         methods:["GET","OPTIONS","PATCH","DELETE","POST","PUT"],
         credentials:true
     }
 });
+app.use(cors());
 
 // app.use(cors({
 //     origin:["https://hello-chat-silk.vercel.app"],
