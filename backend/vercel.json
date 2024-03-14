@@ -8,25 +8,9 @@
     ],
     "routes": [
     {
-    "src": "/",
+    "src": "/(.*)",
     "dest": "/",
     "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
-    },
-    {
-        "src": "/ui/:username",
-        "dest": "/"
-        },
-        {
-            "src": "/registration",
-            "dest": "/"
-            },
-            {
-                "src": "/login",
-                "dest": "/"
-                },
-                {
-                    "src": "/friendReq/:username",
-                    "dest": "/"
-                    }
+    }
     ]
     }
