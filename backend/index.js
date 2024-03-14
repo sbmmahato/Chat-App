@@ -9,6 +9,8 @@ const SECRET = 'abcd1589qwerty';
 const http = require('http').Server(app);
 const cors = require('cors');
 
+app.use(express.json());
+
 app.options("",cors({
     origin:"*",
     credential:true,
@@ -17,10 +19,10 @@ app.options("",cors({
 
 app.use(cors({
     origin:"*",
-    credential:true,
+    credentials:true,
     methods:["GET","POST","PUT","DELETE"]
 }));
-app.use(express.json());
+
 
 // app.use((req, res, next) => {
 //     res.setHeader('Access-Control-Allow-Credentials', true);
