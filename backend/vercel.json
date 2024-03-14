@@ -14,23 +14,19 @@
     },
     {
         "src": "/ui/:username",
-        "dest": "/",
-        "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
+        "dest": "/"
         },
         {
             "src": "/registration",
-            "dest": "/",
-            "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
+            "dest": "/"
             },
             {
                 "src": "/login",
-                "dest": "/",
-                "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
+                "dest": "/"
                 },
                 {
                     "src": "/friendReq/:username",
-                    "dest": "/",
-                    "methods":["GET","POST","PUT","PATCH","DELETE","OPTIONS"]
+                    "dest": "/"
                     }
     ]
     }
