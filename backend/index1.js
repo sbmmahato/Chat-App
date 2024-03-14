@@ -12,7 +12,7 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/chatDB').then(()=>{console.log('mongodb  connected')})
+mongoose.connect('mongodb+srv://sbmmahato:subhammahbus@chatdb.2qwk0rv.mongodb.net/chatDB?retryWrites=true&w=majority').then(()=>{console.log('mongodb  connected')})
 
 function checkIds(data,array){
     let found=false;
