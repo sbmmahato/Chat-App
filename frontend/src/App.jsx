@@ -14,8 +14,8 @@ function App() {
     <>
       <BrowserRouter>
     <Routes>
-    <Route path='/' element={<SelectRoom />} />
-      <Route path='/chatroom/:room' element={<Chatroom />} />
+    <Route path='/' element={<Login />} />
+      {/* <Route path='/chatroom/:room' element={<Chatroom />} /> */}
       <Route path='/ui/:username' element={<Ui />} />
       <Route path='/registration' element={<Registration />} />
       <Route path='/login' element={<Login />} />
