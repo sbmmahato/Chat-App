@@ -4,6 +4,11 @@
         "headers": {
           "Access-Control-Allow-Origin": "https://virmigo.vercel.app",
           "Access-Control-Allow-Credentials": "true"
+        } },
+        { "src": "/socket.io/[^.]+", "dest": "/", "status": 200,"methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        "headers": {
+          "Access-Control-Allow-Origin": "https://virmigo.vercel.app",
+          "Access-Control-Allow-Credentials": "true"
         } }
       ]
 }
