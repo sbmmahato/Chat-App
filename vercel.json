@@ -9,4 +9,5 @@
     "routes": [
       { "src": "ui/[^.]+", "dest": "/", "status": 200 }
     ]
+    
   }
