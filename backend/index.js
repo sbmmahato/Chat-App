@@ -3,7 +3,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const app = express();
-
+require("dotenv").config();
 
 // const PORT = 4000;
 const SECRET = 'abcd1589qwerty';
