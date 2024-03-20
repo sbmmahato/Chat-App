@@ -1,7 +1,9 @@
+// import path from 'path';
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const app = express();
+
 
 // const PORT = 4000;
 const SECRET = 'abcd1589qwerty';
@@ -10,6 +12,11 @@ const http = require('http').Server(app);
 const cors = require('cors');
 
 app.use(express.json());
+
+const PORT=process.env.PORT || 3000;
+const URL=process.env.URL;
+
+// const __dirname=path.resolve();
 
 // app.options("",cors({
 //     origin:"*",
@@ -34,12 +41,7 @@ app.all((req, res, next) => {
     next();
   });
 
-
-
-
-
-
-mongoose.connect('mongodb+srv://sbmmahato:subhammahbus@chatdb.2qwk0rv.mongodb.net/chatDB?retryWrites=true&w=majority').then(()=>{console.log('mongodb  connected')})
+mongoose.connect(URL).then(()=>{console.log('mongodb  connected')})
 
 function checkIds(data,array){
     let found=false;
@@ -316,5 +318,11 @@ io.on('connection',(socket)=>{
     }))
 })
 
-http.listen(3000,()=>{console.log("server running on port 3000")});
+// app.use(express.static(path.join(__dirname,"/frontend/dist")))
+
+// app.get("*",(req,res)=>{
+//     res.sendFile(path.join(__dirname,"frontend","dist","index.html"))
+// })
+
+http.listen(PORT ,()=>{console.log("server running on port 3000")});
 
