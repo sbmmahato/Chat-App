@@ -8,7 +8,7 @@ function FriendReq(){
    const [name,setName]=useState([]);
 
    useEffect(()=>{
-      fetch('https://hello-chat-backend.vercel.app/gettingreqsreceived',{
+      fetch('http://localhost:3000/gettingreqsreceived',{
          method:'POST',
          headers:{
             'Content-Type':'application/json',
@@ -32,7 +32,7 @@ function FriendReq(){
       Enter Username: 
         <input onChange={(e)=>{setUser(e.target.value)}}></input>
         <button onClick={()=>{
-         fetch('https://hello-chat-backend.vercel.app/sendingfriendreq',{
+         fetch('http://localhost:3000/sendingfriendreq',{
             method:'POST',
             headers:{
                'Content-Type':'application/json',
@@ -55,7 +55,7 @@ function UserCard(props){
    return <div style={{border:'1px solid black',height:'100px',width:'270px'}}>
       {props.user.sender}<br/>
       <button  onClick={()=>{
-         fetch('https://hello-chat-backend.vercel.app/acceptingfriendreq',{ 
+         fetch('http://localhost:3000/acceptingfriendreq',{ 
             method:'POST',
             headers:{
                'Content-Type':'application/json',

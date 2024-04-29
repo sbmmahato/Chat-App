@@ -8,7 +8,7 @@ export default function Ui(){
     
     let {username}=useParams();
 
-    const socket=useMemo(()=>io("https://hello-chat-backend.vercel.app/"),[]
+    const socket=useMemo(()=>io("http://localhost:3000/"),[]
     );
 
     const [chat,setChat]=useState([]);
@@ -18,7 +18,7 @@ export default function Ui(){
     // http://localhost:3000/users
     
     useEffect(()=>{
-        fetch('https://hello-chat-backend.vercel.app/users',{
+        fetch('http://localhost:3000/users',{
             method:'GET',
             headers:{
                 'Content-Type':'application/json',
